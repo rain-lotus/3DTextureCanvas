@@ -1,10 +1,10 @@
-PImage Img, Out, tex;
+PImage Img, Out, Texture;
 
 void setup() {
   size(500, 500, P3D);
   Img = loadImage("test2.bmp"); 
-  tex = loadImage("tex.png");
-  tex = tex.get(0, 0, Img.width, Img.height);
+  Texture = loadImage("tex.png");
+  Texture = Texture.get(0, 0, Img.width, Img.height);
   Out = new PImage(200, 200, RGB);
   noStroke();
   colorMode(HSB, 256);
@@ -15,7 +15,7 @@ void draw() {
 
   background(0);
 
-  fix(Img, Out, tex);
+  fix(Img, Out, Texture);
   image(Out, 0, 0);
 
   ambientLight(120, 120, 120);    //環境光を当てる
@@ -24,15 +24,15 @@ void draw() {
 
   translate(200, 200);
   rotateX(frameCount/50.0);
-  make_face(Out);
+  make_face(Out,Img);
 }
 
-void fix(PImage in, PImage out, PImage texture) {
+void fix(PImage in, PImage out, PImage tex) {
   in.loadPixels();
   for (int y = 0; y < in.height; y++ ) {
     for (int x = 0; x < in.width; x++ ) {
       color c = in.get(x, y);
-      color tC = texture.get(x, y);
+      color tC = tex.get(x, y);
       int b = int((brightness(c) + brightness(tC))*0.5);
       c = color(hue(c), saturation(c), b);
       out.set(x, y, c);
@@ -40,31 +40,54 @@ void fix(PImage in, PImage out, PImage texture) {
   }
 }
 
-void make_face(PImage img) {
-  img.loadPixels();
+void make_face(PImage elevation, PImage img) {
+  elevation.loadPixels();
 
+  //面
   beginShape(TRIANGLE_STRIP);
   texture(img);
   float x, y, z;
-
-  for (int i = 0; i < img.pixels.length - img.width; i++) {
-    color c = img.pixels[i];
-    x = i%img.width;
-    y = i/img.width;
+  color c;
+  for (int i = 0; i < elevation.pixels.length - elevation.width; i++) {
+    //0,0
+    c = elevation.pixels[i];
+    x = i%elevation.width;
+    y = i/elevation.width;
     z = brightness(c)/20;
     vertex(x, y, z, x, y);
-    if (i%img.width == 0) {
+    //左上
+    if (i%elevation.width == 0) {
       vertex(x, y, z, x, y);
     }
+    //0,1
+    c = elevation.pixels[i+elevation.width];
+    x = i%elevation.width;
+    y = i/elevation.width + 1;
+    z = brightness(c)/20;
+    //右下
+    vertex(x, y, z, x, y);
+    if (i%elevation.width == elevation.width-1) {
+      vertex(x, y, z, x, y);
+    }
+  }
+  endShape();
 
-    c = img.pixels[i+img.width];
-    x = i%img.width;
-    y = i/img.width + 1;
+  //壁
+  beginShape(TRIANGLE_STRIP);
+  texture(img);
+  for (int i = 0; i < elevation.width; i++) {
+    //0,0
+    c = elevation.pixels[i];
+    x = i%elevation.width;
+    y = i/elevation.width;
     z = brightness(c)/20;
     vertex(x, y, z, x, y);
-    if (i%img.width == img.width-1) {
-      vertex(x, y, z, x, y);
-    }
+
+    //奥
+    x = i%elevation.width;
+    y = i/elevation.width;
+    z = -10;
+    vertex(x, y, z, x, y+1);
   }
   endShape();
 }
