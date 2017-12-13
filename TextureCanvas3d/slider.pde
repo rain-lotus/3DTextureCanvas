@@ -2,6 +2,7 @@ class Slider {
   float x, y, max, min;
   float l = 150;
   float knobx;
+  int r = 8;
   Slider(float posx, float posy, float min, float max) {
     this.x = posx;
     this.y = posy;
@@ -13,13 +14,28 @@ class Slider {
   void disp() {
     fill(255);
     rect(x, y, l, 4, 2);
+    ellipse(knobx, y+2, r*2, r*2);
+    if (grip) knob_move();
   }
-  
-  void knob_move(){
-    
+
+  boolean grip = false;
+  void mousePressed() {
+    if (bounds()) grip = true;
   }
-  
-  float val(){
-    return map(knobx,x,x+l,min,max);
+  void mouseReleased() {
+    grip = false;
+  }
+  boolean bounds() {
+    return dist(mouseX, mouseY, knobx, y+2) < r;
+  }
+
+  void knob_move() {
+    knobx += mouseX - pmouseX;
+    if (knobx < x) knobx = x;
+    if (knobx > x + l) knobx = x + l;
+  }
+
+  float val() {
+    return map(knobx, x, x+l, min, max);
   }
 }

@@ -1,9 +1,8 @@
 PImage Img, Out, Texture; 
 
-Slider s = new Slider(100, 300, 0, 10);
+Slider s = new Slider(100, 400, 0, 10);
 
 void setup() {
-  dragDropFile();
   size(500, 500, P3D);
   Img = loadImage("test2.bmp"); 
   Texture = loadImage("tex.png");
@@ -30,4 +29,13 @@ void draw() {
   rotateX(radians((height/2 - mouseY)*0.2));
   translate(-1 * Img.width/2, -1 * Img.height/2);
   pic_popup(elevation(Img, Texture), Img);
+}
+
+void mousePressed(){
+  s.mousePressed();
+}
+
+void mouseReleased(){
+  s.mouseReleased();
+  println(s.val());
 }
