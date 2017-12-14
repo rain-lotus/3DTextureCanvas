@@ -50,8 +50,8 @@ PImage add_texture(PImage in, PImage tex) {
       color tC = tex.get(x, y);
 
 //ここ後でスライダーにする
-      float tex_str = 0.7;
-      float bound_str = 0.86;
+      float tex_str = tex_var.val();
+      float bound_str = bound_var.val();
 
       int b = int(brightness(c)*bound_str + brightness(tC)*tex_str*(1-bound_str));
       //if(brightness(c) > brightness(tC)) b = int(brightness(c));
