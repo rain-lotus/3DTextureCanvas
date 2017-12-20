@@ -3,6 +3,7 @@ class Slider {
   float l = 150;
   float knobx;
   int r = 8;
+  float tempx,tempy;
   Slider(float posx, float posy, float min, float max) {
     this.x = posx;
     this.y = posy;
