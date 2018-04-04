@@ -54,7 +54,7 @@ void mousePressed() {
   bound_var.mousePressed();
 
   if (630 < mouseX && mouseX < 730&&630 < mouseY&&mouseY < 730) getFile = getFileName();
-  else if (450 < mouseX && mouseX < 500&&640 < mouseY&&mouseY < 720) {
+  else if (450 < mouseX && mouseX < 500&&640 < mouseY&&mouseY < 720) {    
     textnum = (textnum+1)%texs.length;
     Texture = loadImage(texs[textnum]);
     imginit();
