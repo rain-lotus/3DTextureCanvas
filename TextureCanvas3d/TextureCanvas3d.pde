@@ -1,9 +1,18 @@
+import ec.util.*;
+import unlekker.data.*;
+import unlekker.mb2.externals.*;
+import unlekker.mb2.geo.*;
+import unlekker.mb2.util.*;
+
 PImage Img, Out, Texture, fold; 
 String[] texs = {"tex1.png", "tex2.jpg", "tex3.jpg", "tex4.jpg", "tex5.jpg"};
 int textnum = 0;
+boolean save = false;
 
 Slider tex_var = new Slider(70, 660, 0, 1);
 Slider bound_var = new Slider(70, 710, 0, 1);
+
+UGeo model;
 
 void setup() {
   size(800, 800, P3D);
@@ -13,6 +22,8 @@ void setup() {
   imginit();
   noStroke();
   colorMode(HSB, 256);
+  
+  model = new UGeo();
 } 
 
 void imginit() {
@@ -47,6 +58,13 @@ void draw() {
   rotateX(radians((height/2 - mouseY)*0.2));
   translate(-1 * Img.width/2, -1 * Img.height/2);
   pic_popup(elevation(Img, Texture), Img);
+
+  if (save) {
+    build(elevation(Img, Texture), Img);
+    model.writeSTL("C:\\test\\test.stl");
+    println("written");
+    save = false;
+  }
 }
 
 void mousePressed() {
@@ -58,9 +76,9 @@ void mousePressed() {
     textnum = (textnum+1)%texs.length;
     Texture = loadImage(texs[textnum]);
     imginit();
-  }else if (520 < mouseX && mouseX < 570&&640 < mouseY&&mouseY < 720) {
+  } else if (520 < mouseX && mouseX < 570&&640 < mouseY&&mouseY < 720) {
     textnum--;
-    if(textnum < 0) textnum = texs.length-1;
+    if (textnum < 0) textnum = texs.length-1;
     Texture = loadImage(texs[textnum]);
     imginit();
   }
@@ -69,4 +87,8 @@ void mousePressed() {
 void mouseReleased() {
   tex_var.mouseReleased();
   bound_var.mouseReleased();
+}
+
+void keyPressed(){
+ save = true; 
 }

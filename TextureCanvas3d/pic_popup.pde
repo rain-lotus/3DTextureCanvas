@@ -13,17 +13,20 @@ void pic_popup(PImage elevation, PImage img) {
     y = i/elevation.width;
     z = brightness(c)/20;
     vertex(x, y, z, x, y);
+
     //左上
     if (i%elevation.width == 0) {
       vertex(x, y, z, x, y);
     }
+
     //0,1
     c = elevation.pixels[i+elevation.width];
     x = i%elevation.width;
     y = i/elevation.width + 1;
     z = brightness(c)/20;
-    //右下
     vertex(x, y, z, x, y);
+
+    //右下
     if (i%elevation.width == elevation.width-1) {
       vertex(x, y, z, x, y);
     }
