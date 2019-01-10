@@ -18,6 +18,7 @@ void setup() {
   size(800, 800, P3D);
   fold = loadImage("fold.png");
   Img = new PImage(500, 500, RGB);
+  Img = loadImage("test.bmp");
   Texture = loadImage(texs[textnum]);
   imginit();
   noStroke();
